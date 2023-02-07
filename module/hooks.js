@@ -1,7 +1,7 @@
 import {PortraitBox} from "./portrait-box.js";
 import {CONST} from "./const.js";
 import {registerSettings} from "./settings.js";
-import {Subject} from "@esm-bundle/rxjs";
+import {Subject} from "../libs/rxjs/esm/es2015/rxjs.min.js";
 
 export const hoverObservable = new Subject();
 
