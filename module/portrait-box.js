@@ -45,7 +45,9 @@ export class PortraitBox extends Application {
         hoverObservable.subscribe({
             next(x) {
                 if (x.hovered) {
-                    that.show(x.token);
+                    if(!x.token.document.getFlag(CONST.MODULE_NAME, "disabled")) {
+                        that.show(x.token);
+                    }
                 } else {
                     that.hide(x.token);
                 }
@@ -130,13 +132,8 @@ export class PortraitBox extends Application {
             this.element.css("right", `calc(${this.settings.horizontal} + 32px)`);
         }
 
-        let hasBeenAlreadyPresented = true;
-        try {
-            hasBeenAlreadyPresented = token.document.actor.getFlag('introduce-me', 'introduced');
-        } catch (e) {}
-
-        this.element.find(".portrait").css("background-image", `url(${imgPath}`);
-        this.element.find(".label").html(hasBeenAlreadyPresented || token.document.hasPlayerOwner ? token.actor.name : 'Desconocido');
+        this.element.find(".portrait").css("background-image", `url("${imgPath}")`);
+        this.element.find(".label").html(token.actor.name);
 
         this.element.attr("class", CONST.ANCHOR_CLASSES[this.settings.anchor]);
 
@@ -170,8 +167,9 @@ export class PortraitBox extends Application {
     };
 
     shouldShown = (token) => {
-        return (this.settings.showPc && token.document.hasPlayerOwner) ||
+        return !token.document?.hidden && (
+            (this.settings.showPc && token.document.hasPlayerOwner) ||
             (this.settings.showLinkedGm && !token.document.hasPlayerOwner && token.document.isLinked) ||
-            (this.settings.showUnlinkedGm && !token.document.hasPlayerOwner && !token.document.isLinked);
+            (this.settings.showUnlinkedGm && !token.document.hasPlayerOwner && !token.document.isLinked));
     };
 }
