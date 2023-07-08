@@ -132,8 +132,13 @@ export class PortraitBox extends Application {
             this.element.css("right", `calc(${this.settings.horizontal} + 32px)`);
         }
 
-        this.element.find(".portrait").css("background-image", `url("${imgPath}")`);
-        this.element.find(".label").html(token.actor.name);
+        let hasBeenAlreadyPresented = true;
+        try {
+            hasBeenAlreadyPresented = token.document.actor.getFlag('introduce-me', 'introduced');
+        } catch (e) {}
+
+        this.element.find(".portrait").css("background-image", `url(${imgPath}`);
+        this.element.find(".label").html(hasBeenAlreadyPresented || token.document.hasPlayerOwner ? token.actor.name : 'Desconocido');
 
         this.element.attr("class", CONST.ANCHOR_CLASSES[this.settings.anchor]);
 
